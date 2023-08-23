@@ -12,7 +12,8 @@ namespace MooGame
         {
             IUI ui = new ConsoleIO();
             Game game = new Game();
-            GameController gameController = new GameController(game, ui);
+            GameScore gameScore = new GameScore(ui);
+            GameController gameController = new GameController(game, ui, gameScore);
             gameController.Run();
         }
     }
