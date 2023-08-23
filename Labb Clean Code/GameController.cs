@@ -20,36 +20,38 @@ namespace Labb_Clean_Code
         public void Run()
         {
             bool playOn = true;
-            Console.WriteLine("Enter your user name:\n");
-            string name = Console.ReadLine();
+            ui.PutString("Enter your user name:\n");
+            string name = ui.GetString();
 
             while (playOn)
             {
                 string goal = makeGoal();
-
-
-                Console.WriteLine("New game:\n");
+                string input; 
+                //display method
+                ui.PutString("New game:\n");
                 //comment out or remove next line to play real games!
-                Console.WriteLine("For practice, number is: " + goal + "\n");
-                string guess = Console.ReadLine();
+                ui.PutString("For practice, number is: " + goal + "\n");
+                string guess = ui.GetString();
 
                 int nGuess = 1;
+
+                //handle method
                 string bbcc = checkBC(goal, guess);
-                Console.WriteLine(bbcc + "\n");
+                ui.PutString(bbcc + "\n");
                 while (bbcc != "BBBB,")
                 {
                     nGuess++;
-                    guess = Console.ReadLine();
-                    Console.WriteLine(guess + "\n");
+                    guess = ui.GetString();
+                    ui.PutString(guess + "\n");
                     bbcc = checkBC(goal, guess);
-                    Console.WriteLine(bbcc + "\n");
+                    ui.PutString(bbcc + "\n");
                 }
                 StreamWriter output = new StreamWriter("result.txt", append: true);
                 output.WriteLine(name + "#&#" + nGuess);
                 output.Close();
                 showTopList();
-                Console.WriteLine("Correct, it took " + nGuess + " guesses\nContinue?");
-                string answer = Console.ReadLine();
+                ui.PutString("Correct, it took " + nGuess + " guesses\nContinue?");
+                string answer = ui.GetString();
                 if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
                 {
                     playOn = false;
@@ -98,7 +100,7 @@ namespace Labb_Clean_Code
             }
 
 
-            static void showTopList()
+            void showTopList()
             {
                 StreamReader input = new StreamReader("result.txt");
                 List<PlayerData> results = new List<PlayerData>();
@@ -122,10 +124,10 @@ namespace Labb_Clean_Code
 
                 }
                 results.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
-                Console.WriteLine("Player   games average");
+                ui.PutString("Player   games average");
                 foreach (PlayerData p in results)
                 {
-                    Console.WriteLine(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
+                    ui.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
                 }
                 input.Close();
             }
