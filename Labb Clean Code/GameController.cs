@@ -27,6 +27,7 @@ namespace Labb_Clean_Code
             while (playOn)
             {
                 string generatedNumber = game.GenerateNumber();
+
                 //display method
                 ui.PutString("New game:\n");
                 //comment out or remove next line to play real games!
