@@ -15,6 +15,7 @@ namespace MooGame
             GameScore gameScore = new GameScore(ui);
             GameController gameController = new GameController(game, ui, gameScore);
             gameController.Run();
+
         }
     }
 }
