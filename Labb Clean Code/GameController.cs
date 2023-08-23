@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
@@ -21,58 +22,40 @@ namespace Labb_Clean_Code
         {
             bool playOn = true;
             ui.PutString("Enter your user name:\n");
-            string name = ui.GetString();
+            string playerName = ui.GetString();
 
             while (playOn)
             {
-                string goal = makeGoal();
-                string input; 
+                string generatedNumber = game.GenerateNumber();
                 //display method
                 ui.PutString("New game:\n");
                 //comment out or remove next line to play real games!
-                ui.PutString("For practice, number is: " + goal + "\n");
+                ui.PutString("For practice, number is: " + generatedNumber + "\n");
                 string guess = ui.GetString();
 
-                int nGuess = 1;
+                int numberOfGuesses = 1;
 
                 //handle method
-                string bbcc = checkBC(goal, guess);
+                string bbcc = checkBC(generatedNumber, guess);
                 ui.PutString(bbcc + "\n");
                 while (bbcc != "BBBB,")
                 {
-                    nGuess++;
+                    numberOfGuesses++;
                     guess = ui.GetString();
                     ui.PutString(guess + "\n");
-                    bbcc = checkBC(goal, guess);
+                    bbcc = checkBC(generatedNumber, guess);
                     ui.PutString(bbcc + "\n");
                 }
                 StreamWriter output = new StreamWriter("result.txt", append: true);
-                output.WriteLine(name + "#&#" + nGuess);
+                output.WriteLine(playerName + "#&#" + numberOfGuesses);
                 output.Close();
                 showTopList();
-                ui.PutString("Correct, it took " + nGuess + " guesses\nContinue?");
+                ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
                 string answer = ui.GetString();
                 if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
                 {
                     playOn = false;
                 }
-            }
-            static string makeGoal()
-            {
-                Random randomGenerator = new Random();
-                string goal = "";
-                for (int i = 0; i < 4; i++)
-                {
-                    int random = randomGenerator.Next(10);
-                    string randomDigit = "" + random;
-                    while (goal.Contains(randomDigit))
-                    {
-                        random = randomGenerator.Next(10);
-                        randomDigit = "" + random;
-                    }
-                    goal = goal + randomDigit;
-                }
-                return goal;
             }
 
             static string checkBC(string goal, string guess)
