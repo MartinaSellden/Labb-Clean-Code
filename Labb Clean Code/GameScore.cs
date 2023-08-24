@@ -23,21 +23,22 @@ namespace Labb_Clean_Code
         {
             StreamReader input = new StreamReader("result.txt");
             List<PlayerData> results = new List<PlayerData>();
-            string line;
-            while ((line = input.ReadLine()) != null)
+            string lineFromFile;
+            while ((lineFromFile = input.ReadLine()) != null)
             {
-                string[] nameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None); //kan man inte göra en dictionary här? Så man har key-value
+                string[] nameAndScore = lineFromFile.Split(new string[] { "#&#" }, StringSplitOptions.None); //kan man inte göra en dictionary här? Så man har key-value
                 string name = nameAndScore[0];
                 int guesses = Convert.ToInt32(nameAndScore[1]);
-                PlayerData pd = new PlayerData(name, guesses);
-                int pos = results.IndexOf(pd);
-                if (pos < 0)
+                //Dictionary<string, int> scores = new Dictionary<string, int>();  //om man har samma namn? Då skrivs den ju över. Kan man promta om nytt namn om det finns? Är det att lägga till funktionalitet?
+                PlayerData playerData = new PlayerData(name, guesses);
+                int indexOfPlayerData = results.IndexOf(playerData);
+                if (indexOfPlayerData < 0)
                 {
-                    results.Add(pd);
+                    results.Add(playerData);
                 }
                 else
                 {
-                    results[pos].Update(guesses);
+                    results[indexOfPlayerData].Update(guesses);
                 }
             }
             results.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));

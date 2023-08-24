@@ -28,11 +28,12 @@ namespace Labb_Clean_Code
                 ui.PutString("Enter your user name:\n");
 
                 string playerName = ui.GetString();
-                string generatedNumber = game.GenerateNumber();
+                string generatedNumber = game.GenerateNumber(); //borde generera en int och felhantera kring det? 
 
                 ui.PutString("New game:\n");
                 //comment out or remove next line to play real games!
                 ui.PutString("For practice, number is: " + generatedNumber + "\n");
+                
                 string guess = ui.GetString();
 
                 int numberOfGuesses = 1;
@@ -55,7 +56,7 @@ namespace Labb_Clean_Code
             //ui.Exit();   ?
         }
 
-        static string CheckGuess(string goal, string guess)
+        static string CheckGuess(string correctNumber, string guess)  //borde dubbelkolla att vi tar in ett nummer etc
         {
             int cows = 0, bulls = 0;
             guess += "    ";     // if player entered less than 4 chars     ska det här verkligen behöva vara med?
@@ -63,7 +64,7 @@ namespace Labb_Clean_Code
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (goal[i] == guess[j])
+                    if (correctNumber[i] == guess[j])
                     {
                         if (i == j)
                         {
@@ -78,6 +79,10 @@ namespace Labb_Clean_Code
             }
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
         }
+        //static string ShowProgress()
+        //{
+
+        //}
 
     }
 
