@@ -17,7 +17,7 @@ namespace Labb_Clean_Code
             game.SetGameType(gameType);
             GameController gameController = new GameController(game, ui, gameScore, gameType);
             gameController.PlayGame();
-
+             
         }
     }
 }

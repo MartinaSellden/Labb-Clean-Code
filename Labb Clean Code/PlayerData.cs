@@ -32,16 +32,16 @@ namespace Labb_Clean_Code
         }
 
 
-        //public override bool Equals(Object p)
-        //{
-        //    return Name.Equals(((PlayerData)p).Name);
-        //}
+        public override bool Equals(Object p)
+        {
+            return Name.Equals(((PlayerData)p).Name);
+        }
 
 
-        //public override int GetHashCode()
-        //{
-        //    return Name.GetHashCode();
-        //}
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
 
     }
 }
