@@ -9,22 +9,26 @@ namespace Labb_Clean_Code
 {
     internal class Game
     {
+        IGameType gameType;
+
+        public Game()
+        {
+
+        }
+        public Game(IGameType gameType)
+        {
+            this.gameType = gameType;
+        }
+
+        public void SetGameType(IGameType gameType)
+        {
+            this.gameType = gameType;
+        }
+
         public string GenerateNumber()
         {
-            Random randomGenerator = new Random();
-            string generatedNumber = "";
-            for (int i = 0; i < 4; i++)
-            {
-                int random = randomGenerator.Next(10);
-                string randomDigit = "" + random;
-                while (generatedNumber.Contains(randomDigit))
-                {
-                    random = randomGenerator.Next(10);
-                    randomDigit = "" + random;
-                }
-                generatedNumber = generatedNumber + randomDigit;
-            }
-            return generatedNumber;
+            return gameType.GenerateNumber();
+           
         }  
         
     }

@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Labb_Clean_Code;
 
-namespace MooGame
+namespace Labb_Clean_Code
 {
     class Program
     {
@@ -13,9 +13,11 @@ namespace MooGame
             IUI ui = new ConsoleIO();
             Game game = new Game();
             GameScore gameScore = new GameScore(ui);
-            GameController gameController = new GameController(game, ui, gameScore);
-            gameController.Run();
-
+            IGameType gameType = new MooGame(ui, game, gameScore);
+            game.SetGameType(gameType);
+            GameController gameController = new GameController(game, ui, gameScore, gameType);
+            gameController.PlayGame();
+             
         }
     }
 }
