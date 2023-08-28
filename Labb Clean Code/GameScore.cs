@@ -28,8 +28,7 @@ namespace Labb_Clean_Code
             {
                 string[] nameAndScore = lineFromFile.Split(new string[] { "#&#" }, StringSplitOptions.None); //kan man inte göra en dictionary här? Så man har key-value
                 string name = nameAndScore[0];
-                int guesses = Convert.ToInt32(nameAndScore[1]);
-                //Dictionary<string, int> scores = new Dictionary<string, int>();  //om man har samma namn? Då skrivs den ju över. Kan man promta om nytt namn om det finns? Är det att lägga till funktionalitet?
+                int guesses = Convert.ToInt32(nameAndScore[1]);                
                 PlayerData playerData = new PlayerData(name, guesses);
                 int indexOfPlayerData = results.IndexOf(playerData);
                 if (indexOfPlayerData < 0)

@@ -10,7 +10,7 @@ namespace Labb_Clean_Code
     {
         void PlayGame();
         string CheckGuess(string correctNumber, string guess);
-
         string GenerateNumber();
+        bool PlayAgain(string userAnswer);
     }
 }
