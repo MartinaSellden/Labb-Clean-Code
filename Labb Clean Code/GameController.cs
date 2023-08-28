@@ -10,24 +10,19 @@ namespace Labb_Clean_Code
     internal class GameController
     {
         private Game game;
-        private IUI ui;
-        private GameScore gameScore;
         private IGameType gameType;
 
-        public GameController(Game game, IUI ui, GameScore gameScore, IGameType gameType)
+        public GameController(Game game)
         {
             this.game = game;
-            this.ui = ui;
-            this.gameScore = gameScore;
-            this.gameType=gameType;
         }
 
-        public void PlayGame()
+        public void SetGameType(IGameType gameType)
         {
-            gameType.PlayGame();
+            this.gameType = gameType;
         }
 
-        public void CheckGuess(string correctNumber, string guess)  //borde dubbelkolla att vi tar in ett nummer etc
+        public void CheckGuess(string correctNumber, string guess) 
         {
             gameType.CheckGuess(correctNumber, guess);
         }
@@ -35,6 +30,7 @@ namespace Labb_Clean_Code
         {
             return gameType.GenerateNumber();
         }
+        
 
     }
 
