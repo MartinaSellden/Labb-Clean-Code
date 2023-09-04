@@ -12,11 +12,13 @@ namespace Labb_Clean_Code
         IGameType gameType;
         private IUI ui;
         private GameScore gameScore;
+        private IDataHandler fileHandler;
 
-        public Game(IUI ui, GameScore gameScore)
+        public Game(IUI ui, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui = ui;
             this.gameScore = gameScore;
+            this.fileHandler = fileHandler;
         }
         public Game(IGameType gameType)
         {
@@ -52,12 +54,11 @@ namespace Labb_Clean_Code
                 switch (number)
                 {
                     case 1:
-                        setGameType(new MooGame(this.ui, game, this.gameScore));
+                        setGameType(new MooGame(this.ui, game, this.gameScore, this.fileHandler));
                         return gameType;
                     case 2:
-                        setGameType(new GuessNumberGame(this.ui, game, this.gameScore));
+                        setGameType(new GuessNumberGame(this.ui, game, this.gameScore, this.fileHandler));
                         return gameType;
-                  
                 }
             return null;
         }

@@ -11,12 +11,14 @@ namespace Labb_Clean_Code
         private IUI ui;
         private Game game;
         private GameScore gameScore;
+        private IDataHandler fileHandler;
 
-        public GuessNumberGame(IUI ui, Game game, GameScore gameScore)
+        public GuessNumberGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui=ui;
             this.game=game;
             this.gameScore=gameScore;
+            this.fileHandler=fileHandler;
         }
 
         public string CheckGuess(string correctNumber, string guess)  //dubbelkolla input
@@ -71,16 +73,35 @@ namespace Labb_Clean_Code
                 hint = CheckGuess(generatedNumber, guess);
                 ui.PutString(hint + "\n");
             }
-            gameScore.SaveScore(playerName, numberOfGuesses);
-            gameScore.DisplayScore();
-            ui.PutString("It took " + numberOfGuesses + " guesses\nContinue?");
-            
+            string fileName = "GuessNumberGame.txt";
+            Player player = new Player(playerName, numberOfGuesses);
+            List<Player> players = fileHandler.RetrieveData(fileName);
+
+            if (PlayerExists(players, player))
+            {
+                Player playerToUpdate = players.Find(p => p.Name == player.Name);
+                if (playerToUpdate!=null)
+                {
+                    playerToUpdate.Update(numberOfGuesses);
+                }
+            }
+            else
+            {
+                player.Update();
+                players.Add(player);
+            }
+
+            fileHandler.SaveData(fileName, player);
+            gameScore.DisplayScore(fileName);
+            ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
+
             answer = ui.GetString();
 
             if (PlayAgain(answer))
             {
                 game.PlayGame(game);
             }
+
             ui.Exit();
         }
         public bool PlayAgain(string answer)
@@ -91,6 +112,10 @@ namespace Labb_Clean_Code
             }
             return true;
 
+        }
+        public bool PlayerExists(List<Player> players, Player player)
+        {
+            return players.Any(p => p.Name==player.Name);
         }
     }
 }

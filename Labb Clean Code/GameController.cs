@@ -21,7 +21,6 @@ namespace Labb_Clean_Code
         {
             this.gameType = gameType;
         }
-
         public void CheckGuess(string correctNumber, string guess) 
         {
             gameType.CheckGuess(correctNumber, guess);
