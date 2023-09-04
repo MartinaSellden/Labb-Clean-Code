@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
@@ -12,18 +14,20 @@ namespace Labb_Clean_Code
         private IUI ui;
         private Game game;
         private GameScore gameScore;
+        private IDataHandler fileHandler;
 
-        public MooGame(IUI ui, Game game, GameScore gameScore)
+        public MooGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui=ui;
             this.game=game;
             this.gameScore=gameScore;
+            this.fileHandler=fileHandler;
         }
 
-        public string CheckGuess(string correctNumber, string guess)    //dubbelkolla input
+        public string CheckGuess(string correctNumber, string guess)              //dubbelkolla input
         {
             int cows = 0, bulls = 0;
-            guess += "    ";     // if player entered less than 4 chars     ska det här verkligen behöva vara med?
+            guess += "    ";                  // if player entered less than 4 chars     ska det här verkligen behöva vara med? Magisk sträng?
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -72,8 +76,26 @@ namespace Labb_Clean_Code
                 progress = CheckGuess(generatedNumber, guess);
                 ui.PutString(progress + "\n");
             }
-            gameScore.SaveScore(playerName, numberOfGuesses);
-            gameScore.DisplayScore();
+            string fileName = "MooGame.txt";
+            Player player = new Player(playerName, numberOfGuesses);
+            List<Player> players = fileHandler.RetrieveData(fileName); 
+
+            if (PlayerExists(players, player))
+            {
+                Player playerToUpdate = players.Find(p => p.Name == player.Name);
+                if (playerToUpdate!=null)
+                {                                                     
+                    playerToUpdate.Update(numberOfGuesses);
+                }
+            }
+            else
+            {
+                player.Update();
+                players.Add(player);
+            }
+
+            fileHandler.SaveData(fileName, player); 
+            gameScore.DisplayScore(fileName);
             ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
             
             answer = ui.GetString();
@@ -86,7 +108,7 @@ namespace Labb_Clean_Code
             ui.Exit();
         }
 
-        public string GenerateNumber()
+        public string GenerateNumber()    //ändra denna?
         {
             Random randomGenerator = new Random();
 
@@ -113,6 +135,10 @@ namespace Labb_Clean_Code
             }
             return true;
 
+        }
+        public bool PlayerExists(List<Player> players, Player player)
+        {
+            return players.Any(p => p.Name==player.Name);
         }
     }
 }

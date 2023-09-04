@@ -11,8 +11,9 @@ namespace Labb_Clean_Code
         public static void Main(string[] args)
         {
             IUI ui = new ConsoleIO();
-            GameScore gameScore = new GameScore(ui);
-            Game game = new Game(ui, gameScore);
+            IDataHandler fileHandler = new FileHandler();
+            GameScore gameScore = new GameScore(ui, fileHandler);
+            Game game = new Game(ui, gameScore, fileHandler);
             GameController gameController = new GameController(game);
             game.PlayGame(game);
              
