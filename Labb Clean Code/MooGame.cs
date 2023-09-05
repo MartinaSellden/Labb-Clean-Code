@@ -16,6 +16,7 @@ namespace Labb_Clean_Code
         private Game game;
         private GameScore gameScore;
         private IDataHandler fileHandler;
+        private List<Player> players;
 
         public MooGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
         {
@@ -57,39 +58,16 @@ namespace Labb_Clean_Code
             //comment out or remove next line to play real games!
             ui.PutString("For practice, number is: " + generatedNumber + "\n");
 
-            string guess = ui.GetString(); //bryt ut hela gissningsmetoden
-            int numberOfGuesses = 1;
+            int numberOfGuesses = GetNumberOfGuesses(generatedNumber);
 
-            string progress = CheckGuess(generatedNumber, guess);
-            ui.PutString(progress + "\n");
-            while (progress != "BBBB,")
-            {
-                numberOfGuesses++;
-                guess = ui.GetString();
-                ui.PutString(guess + "\n");
-                progress = CheckGuess(generatedNumber, guess);
-                ui.PutString(progress + "\n");
-            }
             string fileName = "MooGame.txt";
-            List<Player> players = fileHandler.RetrieveData(fileName); 
-            
-            if (PlayerExists(players, player))
-            {
-                Player playerToUpdate = players.Find(p => p.Name == player.Name);
-                if (playerToUpdate!=null)
-                {                                                     
-                    playerToUpdate.Update(numberOfGuesses);
-                }
-            }
-            else
-            {
-                player.TotalGuesses = numberOfGuesses;
-                player.Update();
-                players.Add(player);
-            }
+
+            players = fileHandler.RetrieveData(fileName);
+
+            UpdatePlayer(player, numberOfGuesses);
 
             fileHandler.SaveData(fileName, players);
-            players.Clear();
+            players.Clear();                             //ska det vara med?
             gameScore.DisplayScore(fileName);
             ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
 
@@ -134,6 +112,41 @@ namespace Labb_Clean_Code
         public bool PlayerExists(List<Player> players, Player player)
         {
             return players.Any(p => p.Name==player.Name);
+        }
+        public int GetNumberOfGuesses(string generatedNumber)
+        {
+            string guess = ui.GetString(); //bryt ut hela gissningsmetoden
+            int numberOfGuesses = 1;
+
+            string progress = CheckGuess(generatedNumber, guess);
+            ui.PutString(progress + "\n");
+            while (progress != "BBBB,")
+            {
+                numberOfGuesses++;
+                guess = ui.GetString();
+                ui.PutString(guess + "\n");
+                progress = CheckGuess(generatedNumber, guess);
+                ui.PutString(progress + "\n");
+            }
+            return numberOfGuesses;
+        }
+
+        public void UpdatePlayer(Player player, int numberOfGuesses)
+        {
+            if (PlayerExists(players, player))
+            {
+                Player playerToUpdate = players.Find(p => p.Name == player.Name);
+                if (playerToUpdate!=null)
+                {
+                    playerToUpdate.Update(numberOfGuesses);
+                }
+            }
+            else
+            {
+                player.TotalGuesses = numberOfGuesses;
+                player.Update();
+                players.Add(player);
+            }
         }
     }
 }

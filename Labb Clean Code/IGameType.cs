@@ -13,5 +13,7 @@ namespace Labb_Clean_Code
         string GenerateNumber();
         bool PlayAgain(string userAnswer);
         bool PlayerExists(List<Player> players, Player player);
+        int GetNumberOfGuesses(string generatedNumber);
+        void UpdatePlayer(Player player, int numberOfGuesses);
     }
 }
