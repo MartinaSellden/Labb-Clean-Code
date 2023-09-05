@@ -10,14 +10,16 @@ namespace Labb_Clean_Code
     {
         private IUI ui;
         private Game game;
+        private GameController gameController;
         private GameScore gameScore;
         private IDataHandler fileHandler;
         private List<Player> players;
 
-        public GuessNumberGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
+        public GuessNumberGame(IUI ui, Game game, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui=ui;
             this.game=game;
+            this.gameController=gameController;
             this.gameScore=gameScore;
             this.fileHandler=fileHandler;
         }
@@ -71,7 +73,7 @@ namespace Labb_Clean_Code
 
             if (PlayAgain(answer))
             {
-                game.PlayAgain(game, player);
+                gameController.PlayAgain(game, player);
             }
 
             ui.Exit();

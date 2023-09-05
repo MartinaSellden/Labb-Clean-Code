@@ -8,7 +8,7 @@ namespace Labb_Clean_Code
 {
     internal class FileHandler: IDataHandler
     {
-        private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas
+        private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas?
 
 
         //ta in en resultattabell? För att spara olika tabeller i filerna. 
@@ -54,7 +54,7 @@ namespace Labb_Clean_Code
             }
             StreamWriter writeToFile = new StreamWriter(fileName, append: false);
 
-            foreach(Player gamePlayer in players)    //kolla detta. Den sparar ju samma lista till de olika filerna oavsett vilket spel man spelar! Men de borde vara olika för vi läser in olika filer.  
+            foreach(Player gamePlayer in players)    //kolla detta. Listorna borde vara olika för vi läser in olika filer.  
             {
                 writeToFile.WriteLine(gamePlayer.Name + "&"  + gamePlayer.NumberOfGames +"&"+ gamePlayer.TotalGuesses  + "&" + gamePlayer.AverageGuesses );
             }

@@ -14,14 +14,17 @@ namespace Labb_Clean_Code
     {
         private IUI ui;
         private Game game;
+        private GameController gameController;
         private GameScore gameScore;
         private IDataHandler fileHandler;
         private List<Player> players;
+      
 
-        public MooGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
+        public MooGame(IUI ui, Game game, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui=ui;
             this.game=game;
+            this.gameController=gameController;
             this.gameScore=gameScore;
             this.fileHandler=fileHandler;
         }
@@ -52,7 +55,7 @@ namespace Labb_Clean_Code
 
         public void PlayGame(Player player)
         {
-            string generatedNumber = game.GenerateNumber(); 
+            string generatedNumber = gameController.GenerateNumber(); 
 
             ui.PutString("New game:\n");
             //comment out or remove next line to play real games!
@@ -75,7 +78,7 @@ namespace Labb_Clean_Code
 
             if (PlayAgain(answer))
             {
-                game.PlayAgain(game, player);
+                gameController.PlayAgain(game, player);
             }
 
             ui.Exit();
@@ -115,7 +118,7 @@ namespace Labb_Clean_Code
         }
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = ui.GetString(); //bryt ut hela gissningsmetoden
+            string guess = ui.GetString(); 
             int numberOfGuesses = 1;
 
             string progress = CheckGuess(generatedNumber, guess);
