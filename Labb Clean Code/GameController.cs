@@ -17,6 +17,7 @@ namespace Labb_Clean_Code
             this.game = game;
         }
 
+        // spela härifrån
         public void SetGameType(IGameType gameType)
         {
             this.gameType = gameType;

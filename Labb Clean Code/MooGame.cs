@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -48,22 +49,15 @@ namespace Labb_Clean_Code
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
         }
 
-        public void PlayGame()
+        public void PlayGame(Player player)
         {
-            string answer = "";
-
-            ui.PutString("Enter your user name:\n");
-
-            string playerName = ui.GetString();
-
             string generatedNumber = game.GenerateNumber(); 
 
             ui.PutString("New game:\n");
             //comment out or remove next line to play real games!
             ui.PutString("For practice, number is: " + generatedNumber + "\n");
 
-            string guess = ui.GetString();
-
+            string guess = ui.GetString(); //bryt ut hela gissningsmetoden
             int numberOfGuesses = 1;
 
             string progress = CheckGuess(generatedNumber, guess);
@@ -77,9 +71,8 @@ namespace Labb_Clean_Code
                 ui.PutString(progress + "\n");
             }
             string fileName = "MooGame.txt";
-            Player player = new Player(playerName, numberOfGuesses);
             List<Player> players = fileHandler.RetrieveData(fileName); 
-
+            
             if (PlayerExists(players, player))
             {
                 Player playerToUpdate = players.Find(p => p.Name == player.Name);
@@ -90,19 +83,21 @@ namespace Labb_Clean_Code
             }
             else
             {
+                player.TotalGuesses = numberOfGuesses;
                 player.Update();
                 players.Add(player);
             }
 
-            fileHandler.SaveData(fileName, player); 
+            fileHandler.SaveData(fileName, players);
+            players.Clear();
             gameScore.DisplayScore(fileName);
             ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
-            
-            answer = ui.GetString();
+
+            string answer = ui.GetString();
 
             if (PlayAgain(answer))
             {
-                game.PlayGame(game);
+                game.PlayAgain(game, player);
             }
 
             ui.Exit();

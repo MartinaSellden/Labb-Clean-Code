@@ -10,7 +10,7 @@ namespace Labb_Clean_Code
     {
         public void Clear()
         {
-            //not used;
+            Console.Clear();
         }
 
         public void Exit()

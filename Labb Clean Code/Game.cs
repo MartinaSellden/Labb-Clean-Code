@@ -13,6 +13,7 @@ namespace Labb_Clean_Code
         private IUI ui;
         private GameScore gameScore;
         private IDataHandler fileHandler;
+        private List<Player> players = new List<Player>();
 
         public Game(IUI ui, GameScore gameScore, IDataHandler fileHandler)
         {
@@ -27,8 +28,17 @@ namespace Labb_Clean_Code
 
         public void PlayGame(Game game)
         {
+            string playerName = getPlayerName();
+            Player player = new Player(playerName);
+
             SetGameType(GetGameType(game));
-            gameType.PlayGame();
+
+            gameType.PlayGame(player);
+        }
+        public void PlayAgain(Game game, Player player)
+        {
+            SetGameType(GetGameType(game));
+            gameType.PlayGame(player);
         }
 
         public void SetGameType(IGameType gameType)
@@ -48,8 +58,9 @@ namespace Labb_Clean_Code
         public IGameType GetGameType(Game game)
         {
             DisplayMenu();
-            int number = GetUserInput();
+            int number = getUserInput();
 
+            //while true
             if (number>=1)
                 switch (number)
                 {
@@ -60,14 +71,14 @@ namespace Labb_Clean_Code
                         setGameType(new GuessNumberGame(this.ui, game, this.gameScore, this.fileHandler));
                         return gameType;
                 }
-            return null;
+            return null; // fixa!!
         }
         public void DisplayMenu()
         {
             ui.PutString("Choose a game:\n");
             ui.PutString("1. Moo Game \n2. Guess the Number Game");
         }
-        public int GetUserInput()
+        int getUserInput()
         {
             string choice = ui.GetString();
             while (choice == null || choice == "")
@@ -80,6 +91,12 @@ namespace Labb_Clean_Code
                 return number;
             }
             return -1;
+        }
+
+        string getPlayerName()
+        {
+            ui.PutString("Enter your user name:\n");
+            return ui.GetString();
         }
 
     }

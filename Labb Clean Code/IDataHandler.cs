@@ -8,7 +8,7 @@ namespace Labb_Clean_Code
 {
     internal interface IDataHandler
     {
-        void SaveData(string fileName, Player player);
+        void SaveData(string fileName, List<Player> players);
         List<Player> RetrieveData(string fileName);
     }
 }

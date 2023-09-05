@@ -42,16 +42,12 @@ namespace Labb_Clean_Code
         public string GenerateNumber()
         {
             Random randomGenerator = new Random();
-            int generatedNumber = randomGenerator.Next(0, 101);
+            int generatedNumber = randomGenerator.Next(1, 101);  //kolla att det är rätt
             return generatedNumber.ToString();
         }
 
-        public void PlayGame()
+        public void PlayGame(Player player)
         {
-            string answer = "";
-            ui.PutString("Enter your user name:\n");
-
-            string playerName = ui.GetString();
             string generatedNumber = game.GenerateNumber();
 
             ui.PutString("Guess the number (between 1 and 100)\n");
@@ -74,7 +70,6 @@ namespace Labb_Clean_Code
                 ui.PutString(hint + "\n");
             }
             string fileName = "GuessNumberGame.txt";
-            Player player = new Player(playerName, numberOfGuesses);
             List<Player> players = fileHandler.RetrieveData(fileName);
 
             if (PlayerExists(players, player))
@@ -87,19 +82,21 @@ namespace Labb_Clean_Code
             }
             else
             {
+                player.TotalGuesses = numberOfGuesses;
                 player.Update();
                 players.Add(player);
             }
 
-            fileHandler.SaveData(fileName, player);
+            fileHandler.SaveData(fileName, players);
+            players.Clear(); //måste kolla varför den plussar antalet spel från båda tabellerna.
             gameScore.DisplayScore(fileName);
-            ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
+            ui.PutString("Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue?");
 
-            answer = ui.GetString();
+            string answer = ui.GetString();
 
             if (PlayAgain(answer))
             {
-                game.PlayGame(game);
+                game.PlayAgain(game, player);
             }
 
             ui.Exit();

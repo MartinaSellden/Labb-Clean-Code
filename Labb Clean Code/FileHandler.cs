@@ -8,10 +8,13 @@ namespace Labb_Clean_Code
 {
     internal class FileHandler: IDataHandler
     {
-        private List<Player> players = new List<Player>();
+        private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas
+
+
+        //ta in en resultattabell? För att spara olika tabeller i filerna. 
         public FileHandler() { }
 
-        public List<Player> RetrieveData(string fileName) //göra till List<Player>? 
+        public List<Player> RetrieveData(string fileName) 
         {
             if (!File.Exists(fileName))
             {
@@ -32,24 +35,17 @@ namespace Labb_Clean_Code
 
                 bool playerExists = players.Any(player => player.Name==name);
                 if (!playerExists)
-                //{
-                //    Player playerToUpdate = players.Find(player => player.Name == name);
-                //    if (playerToUpdate!=null)
-                //    {
-                //        playerToUpdate.Update(totalGuesses);
-                //    }
-                //}
-                //else
-                //{
+                {
                     players.Add(player);
-                //}         
+                }
+            
             }
             dataFromFile.Close();
             return players;
 
         }
 
-        public void SaveData(string fileName, Player player)
+        public void SaveData(string fileName, List<Player> players)
         {
             if (!File.Exists(fileName))
             {
@@ -57,9 +53,8 @@ namespace Labb_Clean_Code
                 writer.Close();
             }
             StreamWriter writeToFile = new StreamWriter(fileName, append: false);
-           // player.Update();
 
-            foreach(Player gamePlayer in players)
+            foreach(Player gamePlayer in players)    //kolla detta. Den sparar ju samma lista till de olika filerna oavsett vilket spel man spelar! Men de borde vara olika för vi läser in olika filer.  
             {
                 writeToFile.WriteLine(gamePlayer.Name + "&"  + gamePlayer.NumberOfGames +"&"+ gamePlayer.TotalGuesses  + "&" + gamePlayer.AverageGuesses );
             }

@@ -8,7 +8,7 @@ namespace Labb_Clean_Code
 {
     internal interface IGameType
     {
-        void PlayGame();
+        void PlayGame(Player player);
         string CheckGuess(string correctNumber, string guess);
         string GenerateNumber();
         bool PlayAgain(string userAnswer);
