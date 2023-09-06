@@ -55,6 +55,7 @@ namespace Labb_Clean_Code
 
         public void PlayGame(Player player)
         {
+            player.NumberOfGames=0;
             string generatedNumber = gameController.GenerateNumber(); 
 
             ui.PutString("New game:\n");
@@ -67,11 +68,11 @@ namespace Labb_Clean_Code
 
             players = fileHandler.RetrieveData(fileName);
 
+
             UpdatePlayer(player, numberOfGuesses);
 
-            fileHandler.SaveData(fileName, players);
-            players.Clear();                             //ska det vara med?
-            gameScore.DisplayScore(fileName);
+            fileHandler.SaveData(fileName, players);                           
+            gameScore.DisplayScore(fileName, players);
             ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
 
             string answer = ui.GetString();

@@ -23,6 +23,8 @@ namespace Labb_Clean_Code
             }
             StreamReader dataFromFile = new StreamReader(fileName);
 
+            players.Clear();
+
             string lineFromFile;
             while ((lineFromFile = dataFromFile.ReadLine()) != null)
             {

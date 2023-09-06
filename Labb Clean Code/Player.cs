@@ -11,7 +11,7 @@ namespace Labb_Clean_Code
         public string Name { get; private set; }
         public int NumberOfGames { get; set; }
         public int TotalGuesses { get; set; }
-        public double AverageGuesses { get; private set; }
+        public double AverageGuesses { get; set; }
 
         public Player(string name)
         {
@@ -41,7 +41,7 @@ namespace Labb_Clean_Code
         public void Update()
         {
             NumberOfGames++;
-            AverageGuesses = TotalGuesses / NumberOfGames;
+            AverageGuesses = (double) TotalGuesses / NumberOfGames;
         }
 
     }

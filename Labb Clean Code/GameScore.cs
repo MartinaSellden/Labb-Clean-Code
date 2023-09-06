@@ -16,11 +16,8 @@ namespace Labb_Clean_Code
             this.ui = ui;
             this.fileHandler = fileHandler;
         }
-        public void DisplayScore(string fileName)
-        {
-            
-            List<Player> players = fileHandler.RetrieveData(fileName);
-
+        public void DisplayScore(string fileName, List<Player> players)
+        {      
             List<Player> playersOrderedByAverageGuesses = players.OrderBy(player => player.AverageGuesses).ToList();
             ui.PutString("Player   games average");
 

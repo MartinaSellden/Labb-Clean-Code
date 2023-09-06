@@ -51,6 +51,7 @@ namespace Labb_Clean_Code
 
         public void PlayGame(Player player)
         {
+            player.NumberOfGames=0;
             string generatedNumber = game.GenerateNumber();
 
             ui.PutString("Guess the number (between 1 and 100)\n");
@@ -65,8 +66,7 @@ namespace Labb_Clean_Code
             UpdatePlayer(player, numberOfGuesses);
 
             fileHandler.SaveData(fileName, players);
-            players.Clear(); //måste kolla varför den plussar antalet spel från båda tabellerna. Ska clear vara med?
-            gameScore.DisplayScore(fileName);
+            gameScore.DisplayScore(fileName, players);
             ui.PutString("Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue?");
 
             string answer = ui.GetString();
