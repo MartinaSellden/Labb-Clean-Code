@@ -24,7 +24,7 @@ namespace Labb_Clean_Code
             this.fileHandler=fileHandler;
         }
 
-        public string CheckGuess(string correctNumber, string guess)  //dubbelkolla input
+        public string CheckGuess(string correctNumber, string guess)  //dubbelkolla input. Ta in int här
         {
             int numberToGuess = int.Parse(correctNumber);
             int playerGuess = int.Parse(guess);
@@ -42,9 +42,8 @@ namespace Labb_Clean_Code
             return "Correct!";
         }
 
-        public string GenerateNumber()
+        public string GenerateRandomNumber(IRandomNumberGenerator randomGenerator)
         {
-            Random randomGenerator = new Random();
             int generatedNumber = randomGenerator.Next(1, 101);  //kolla att det är rätt
             return generatedNumber.ToString();
         }
@@ -52,7 +51,9 @@ namespace Labb_Clean_Code
         public void PlayGame(Player player)
         {
             player.NumberOfGames=0;
-            string generatedNumber = game.GenerateNumber();
+
+            IRandomNumberGenerator random = new RandomNumberGenerator();
+            string generatedNumber = gameController.GenerateRandomNumber(random);
 
             ui.PutString("Guess the number (between 1 and 100)\n");
             ui.PutString("For practice the number is:" + generatedNumber);
@@ -94,7 +95,7 @@ namespace Labb_Clean_Code
 
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = ui.GetString();
+            string guess = ui.GetString();    
 
             int numberOfGuesses = 1;
 

@@ -7,7 +7,7 @@ using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
-    internal class Game
+    public class Game
     {
         IGameType gameType;
         private IUI ui;
@@ -23,9 +23,9 @@ namespace Labb_Clean_Code
             this.gameScore = gameScore;
             this.fileHandler = fileHandler;
         }
-        public string GenerateNumber()
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
         {
-            return gameType.GenerateNumber();
+            return gameType.GenerateRandomNumber(randomNumberGenerator);
 
         }
         private void setGameType(IGameType gameType)

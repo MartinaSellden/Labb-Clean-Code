@@ -12,7 +12,7 @@ namespace Labb_Clean_Code
         {
             IUI ui = new ConsoleIO();
             IDataHandler fileHandler = new FileHandler();
-            GameScore gameScore = new GameScore(ui, fileHandler);
+            GameScore gameScore = new GameScore(ui);
             GameController gameController = new GameController(ui);
             Game game = new Game(ui, gameController, gameScore, fileHandler);
             gameController.PlayGame(game);

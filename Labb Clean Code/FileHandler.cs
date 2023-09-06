@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal class FileHandler: IDataHandler
+    public class FileHandler: IDataHandler
     {
         private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas?
 
@@ -56,7 +56,7 @@ namespace Labb_Clean_Code
             }
             StreamWriter writeToFile = new StreamWriter(fileName, append: false);
 
-            foreach(Player gamePlayer in players)    //kolla detta. Listorna borde vara olika för vi läser in olika filer.  
+            foreach(Player gamePlayer in players)    
             {
                 writeToFile.WriteLine(gamePlayer.Name + "&"  + gamePlayer.NumberOfGames +"&"+ gamePlayer.TotalGuesses  + "&" + gamePlayer.AverageGuesses );
             }

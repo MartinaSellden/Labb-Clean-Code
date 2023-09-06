@@ -56,7 +56,9 @@ namespace Labb_Clean_Code
         public void PlayGame(Player player)
         {
             player.NumberOfGames=0;
-            string generatedNumber = gameController.GenerateNumber(); 
+
+            IRandomNumberGenerator random = new RandomNumberGenerator();
+            string generatedNumber = gameController.GenerateRandomNumber(random); 
 
             ui.PutString("New game:\n");
             //comment out or remove next line to play real games!
@@ -85,18 +87,16 @@ namespace Labb_Clean_Code
             ui.Exit();
         }
 
-        public string GenerateNumber()    //ändra denna?
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)    //ändra denna?
         {
-            Random randomGenerator = new Random();
-
             string generatedNumber = "";
             for (int i = 0; i < 4; i++)
             {
-                int random = randomGenerator.Next(10);
+                int random = randomNumberGenerator.Next(10);
                 string randomDigit = "" + random;
                 while (generatedNumber.Contains(randomDigit))
                 {
-                    random = randomGenerator.Next(10);
+                    random = randomNumberGenerator.Next(10);
                     randomDigit = "" + random;
                 }
                 generatedNumber = generatedNumber + randomDigit;
@@ -152,5 +152,6 @@ namespace Labb_Clean_Code
                 players.Add(player);
             }
         }
+
     }
 }

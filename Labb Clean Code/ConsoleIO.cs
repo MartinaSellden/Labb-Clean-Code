@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal class ConsoleIO : IUI
+    public class ConsoleIO : IUI
     {
         public void Clear()
         {

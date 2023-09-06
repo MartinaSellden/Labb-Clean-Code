@@ -7,7 +7,7 @@ using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
-    internal class GameController
+    public class GameController
     {
         private IUI ui;
         private IGameType gameType;
@@ -24,9 +24,9 @@ namespace Labb_Clean_Code
         {
             gameType.CheckGuess(correctNumber, guess);
         }
-        public string GenerateNumber()
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
         {
-            return gameType.GenerateNumber();
+            return gameType.GenerateRandomNumber(randomNumberGenerator);
         }
         public void PlayGame(Game game)
         {

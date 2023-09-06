@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal class GameScore
+    public class GameScore
     {
         private IUI ui;
-        private IDataHandler fileHandler;
-
-        public GameScore(IUI ui, IDataHandler fileHandler)
+        public GameScore(IUI ui)
         {
             this.ui = ui;
-            this.fileHandler = fileHandler;
         }
         public void DisplayScore(string fileName, List<Player> players)
         {      
