@@ -15,6 +15,6 @@ namespace Labb_Clean_Code
         bool PlayerExists(List<Player> players, Player player);
         int GetNumberOfGuesses(string generatedNumber);
         void UpdatePlayer(Player player, int numberOfGuesses);
-        int GetUserInput();
+        int GetUserGuess();
     }
 }

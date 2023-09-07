@@ -70,7 +70,7 @@ namespace Labb_Clean_Code
             do
             {
                 ui.PutString("\nPlease enter the number corresponding to the game you wish to play:");
-                string inputString = ui.GetString();
+                string inputString = ui.GetString().Trim();
 
                 if (inputString.Length == 1 && int.TryParse(inputString, out userInput))
                 {

@@ -8,10 +8,8 @@ namespace Labb_Clean_Code
 {
     public class FileHandler: IDataHandler
     {
-        private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas?
+        private List<Player> players = new List<Player>(); 
 
-
-        //ta in en resultattabell? För att spara olika tabeller i filerna. 
         public FileHandler() { }
 
         public List<Player> RetrieveData(string fileName) 

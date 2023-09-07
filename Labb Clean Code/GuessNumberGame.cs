@@ -33,11 +33,11 @@ namespace Labb_Clean_Code
             {
                 if (numberToGuess > playerGuess)
                 {
-                    return "Too low!\n";
+                    return "Too low, try again:\n";
                 }
                 if (numberToGuess < playerGuess)
                 {
-                    return "Too high!\n";
+                    return "Too high, try again:\n";
                 }
             }
             return "Correct!";
@@ -56,8 +56,12 @@ namespace Labb_Clean_Code
             IRandomNumberGenerator random = new RandomNumberGenerator();
             string generatedNumber = gameController.GenerateRandomNumber(random);
 
+            if (isPracticeSession())
+            {
+                displayGeneratedNumber(generatedNumber);
+            }
+
             ui.PutString("Guess the number (between 1 and 100)\n");
-            ui.PutString("For practice the number is:" + generatedNumber);
 
             int numberOfGuesses = GetNumberOfGuesses(generatedNumber);
 
@@ -70,11 +74,11 @@ namespace Labb_Clean_Code
             fileHandler.SaveData(fileName, players);
             gameScore.DisplayScore(fileName, players);
 
-            string message = numberOfGuesses>1 ? "Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue y/n? ": "Well played, "+ player.Name + "! It took " + numberOfGuesses + " guess\nContinue y/n?";
+            string message = numberOfGuesses>1 ? "Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue y/n? " : "Well played, "+ player.Name + "! It took " + numberOfGuesses + " guess\nContinue y/n?";
 
             ui.PutString(message);
 
-            string answer = ui.GetString();
+            string answer = ui.GetString();  //kanske kolla input?
 
             if (PlayAgain(answer))
             {
@@ -99,7 +103,7 @@ namespace Labb_Clean_Code
 
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = GetUserInput().ToString();    
+            string guess = GetUserGuess().ToString();
 
             int numberOfGuesses = 1;
 
@@ -111,7 +115,7 @@ namespace Labb_Clean_Code
             while (hint != "Correct!")
             {
                 numberOfGuesses++;
-                guess = GetUserInput().ToString(); 
+                guess = GetUserGuess().ToString();
                 hint = CheckGuess(generatedNumber, guess);
                 ui.PutString(hint + "\n");
             }
@@ -135,7 +139,7 @@ namespace Labb_Clean_Code
             }
         }
 
-        public int GetUserInput()
+        public int GetUserGuess()
         {
             int userInput = 0;
             bool isValidInput = false;
@@ -143,7 +147,7 @@ namespace Labb_Clean_Code
             do
             {
                 ui.PutString("\nEnter a number between 1 and 100:");
-                string inputString = ui.GetString();
+                string inputString = ui.GetString().Trim();
 
                 if (inputString.Length>0 && inputString.Length<4 && int.TryParse(inputString, out userInput))
                 {
@@ -156,7 +160,25 @@ namespace Labb_Clean_Code
             } while (!isValidInput);
 
             return userInput;
+        }
 
+        void displayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        {
+            ui.PutString("For practice the number is:" + generatedNumber);
+        }
+        bool isPracticeSession()
+        {
+            ui.PutString("\nWould you like to practice ? y/n : ");
+            string inputString = ui.GetString().Trim();
+
+            if (inputString != null && inputString != "" && inputString.Substring(0, 1)!="n")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

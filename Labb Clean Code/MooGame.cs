@@ -29,7 +29,7 @@ namespace Labb_Clean_Code
             this.fileHandler=fileHandler;
         }
 
-        public string CheckGuess(string correctNumber, string guess)              //dubbelkolla input
+        public string CheckGuess(string correctNumber, string guess)            
         {
             int cows = 0, bulls = 0;
 
@@ -60,9 +60,12 @@ namespace Labb_Clean_Code
             IRandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
             string generatedNumber = gameController.GenerateRandomNumber(randomNumberGenerator);
 
+            if (isPracticeSession())
+            {
+                displayGeneratedNumber(generatedNumber);
+            }
+
             ui.PutString("New game:\n");
-            //comment out or remove next line to play real games!
-            ui.PutString("For practice, number is: " + generatedNumber + "\n");
 
             int numberOfGuesses = GetNumberOfGuesses(generatedNumber);
 
@@ -79,7 +82,7 @@ namespace Labb_Clean_Code
 
             ui.PutString(message);
 
-            string answer = ui.GetString();
+            string answer = ui.GetString();     //kolla input?
 
             if (PlayAgain(answer))
             {
@@ -122,7 +125,7 @@ namespace Labb_Clean_Code
 
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = GetUserInput().ToString();
+            string guess = GetUserGuess().ToString();
             int numberOfGuesses = 1;
 
             string progress = CheckGuess(generatedNumber, guess);
@@ -130,7 +133,7 @@ namespace Labb_Clean_Code
             while (progress != "BBBB,")
             {
                 numberOfGuesses++;
-                guess = GetUserInput().ToString();
+                guess = GetUserGuess().ToString();
                 ui.PutString(guess + "\n");
                 progress = CheckGuess(generatedNumber, guess);
                 ui.PutString(progress + "\n");
@@ -156,7 +159,7 @@ namespace Labb_Clean_Code
             }
         }
 
-        public int GetUserInput()
+        public int GetUserGuess()
         {
             int userInput = 0;
             bool isValidInput = false;
@@ -164,7 +167,7 @@ namespace Labb_Clean_Code
             do
             {
                 ui.PutString("Please enter a four digit number:");
-                string inputString = ui.GetString();
+                string inputString = ui.GetString().Trim();
 
                 if (inputString.Length == 4 && int.TryParse(inputString, out userInput))
                 {
@@ -177,7 +180,24 @@ namespace Labb_Clean_Code
             } while (!isValidInput);
 
             return userInput;
+        }
+        void displayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        {
+            ui.PutString("For practice the number is:" + generatedNumber);
+        }
+        bool isPracticeSession()
+        {
+            ui.PutString("\nWould you like to practice ? y/n : ");
+            string inputString = ui.GetString().Trim();
 
+            if (inputString != null && inputString != "" && inputString.Substring(0, 1)!="n")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
