@@ -22,18 +22,46 @@ namespace Labb_Clean_Code.Tests
             game = new Game(ui, gameController, gameScore, fileHandler);
         }
 
-            [TestMethod]
+        [TestMethod]
         public void TestGenerateRandomNumber()
         {  
             IRandomNumberGenerator randomNumberGenerator = new MockRandomNumberGenerator(1234);
-            string generatedNumber = game.GenerateRandomNumber(randomNumberGenerator);
+            var generatedNumber = game.GenerateRandomNumber(randomNumberGenerator);
 
-            Assert.AreEqual(1234, generatedNumber);
+            Assert.AreEqual("1234", generatedNumber);
         }
 
         [TestMethod]
-        public void TestGetGameType()
+        public void TestGetGameType_ChooseMooGame()
         {
+            var mockUI = new MockUI();
+            GameController gameController = new GameController(mockUI);
+            IDataHandler fileHandler = new FileHandler();
+            GameScore gameScore = new GameScore(mockUI);
+            game = new Game(mockUI, gameController, gameScore, fileHandler);
+
+            mockUI.PutString("Choose a game type: 1 for MooGame, 2 for GuessNumberGame");
+            mockUI.SetStringInput("1"); 
+            IGameType gameType = game.GetGameType(game);
+            Assert.IsInstanceOfType(gameType, typeof(MooGame));
+
+        }
+
+        [TestMethod]
+        public void TestGetGameType_ChooseGuessNumberGame()
+        {
+            var mockUI = new MockUI();
+            GameController gameController = new GameController(mockUI);
+            IDataHandler fileHandler = new FileHandler();
+            GameScore gameScore = new GameScore(mockUI);
+            game = new Game(mockUI, gameController, gameScore, fileHandler);
+
+            mockUI.PutString("Choose a game type: 1 for MooGame, 2 for GuessNumberGame");
+            mockUI.SetStringInput("2"); 
+
+            IGameType gameType = game.GetGameType(game);
+            Assert.IsInstanceOfType(gameType, typeof(GuessNumberGame));
+
         }
 
         [TestMethod]

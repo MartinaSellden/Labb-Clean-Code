@@ -47,6 +47,10 @@ namespace Labb_Clean_Code
                     case 2:
                         setGameType(new GuessNumberGame(this.ui, game, this.gameController, this.gameScore, this.fileHandler));
                         break;
+                    default:
+                        ui.PutString("Invalid input");
+                        GetGameType(game);
+                        break;
                 }
                 return gameType; 
             }
@@ -57,20 +61,29 @@ namespace Labb_Clean_Code
             ui.PutString("Choose a game:\n");
             ui.PutString("1. Moo Game \n2. Guess the Number Game");
         }
+
         int getUserInput()
         {
-            string choice = ui.GetString();
-            while (choice == null || choice == "")
-            {
-                ui.PutString("Please enter a valid number\n 1. Moo Game \n2. Guess the Number Game");
-            }
-            bool success = int.TryParse(choice, out int number);
-            if (success)
-            {
-                return number;
-            }
-            return -1;
-        }
+            int userInput = 0;
+            bool isValidInput = false;
 
+            do
+            {
+                ui.PutString("\nPlease enter the number corresponding to the game you wish to play:");
+                string inputString = ui.GetString();
+
+                if (inputString.Length == 1 && int.TryParse(inputString, out userInput))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    ui.PutString("Invalid input.");
+                    DisplayMenu();
+                }
+            } while (!isValidInput);
+
+            return userInput;
+        }
     }
 }

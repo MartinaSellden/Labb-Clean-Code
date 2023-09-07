@@ -10,7 +10,7 @@ using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
-    internal class MooGame : IGameType
+    public class MooGame : IGameType
     {
         private IUI ui;
         private Game game;
@@ -18,7 +18,7 @@ namespace Labb_Clean_Code
         private GameScore gameScore;
         private IDataHandler fileHandler;
         private List<Player> players;
-      
+
 
         public MooGame(IUI ui, Game game, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
@@ -32,7 +32,7 @@ namespace Labb_Clean_Code
         public string CheckGuess(string correctNumber, string guess)              //dubbelkolla input
         {
             int cows = 0, bulls = 0;
-            guess += "    ";                  // if player entered less than 4 chars     ska det här verkligen behöva vara med? Magisk sträng?
+
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -57,8 +57,8 @@ namespace Labb_Clean_Code
         {
             player.NumberOfGames=0;
 
-            IRandomNumberGenerator random = new RandomNumberGenerator();
-            string generatedNumber = gameController.GenerateRandomNumber(random); 
+            IRandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+            string generatedNumber = gameController.GenerateRandomNumber(randomNumberGenerator);
 
             ui.PutString("New game:\n");
             //comment out or remove next line to play real games!
@@ -70,12 +70,14 @@ namespace Labb_Clean_Code
 
             players = fileHandler.RetrieveData(fileName);
 
-
             UpdatePlayer(player, numberOfGuesses);
 
-            fileHandler.SaveData(fileName, players);                           
+            fileHandler.SaveData(fileName, players);
             gameScore.DisplayScore(fileName, players);
-            ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
+
+            string message = numberOfGuesses>1 ? "Correct, it took " + numberOfGuesses + " guesses.\nContinue y/n?" : "Correct, it took " + numberOfGuesses + " guess.\nContinue y/n?";
+
+            ui.PutString(message);
 
             string answer = ui.GetString();
 
@@ -87,7 +89,7 @@ namespace Labb_Clean_Code
             ui.Exit();
         }
 
-        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)    //ändra denna?
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
         {
             string generatedNumber = "";
             for (int i = 0; i < 4; i++)
@@ -117,9 +119,10 @@ namespace Labb_Clean_Code
         {
             return players.Any(p => p.Name==player.Name);
         }
+
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = ui.GetString(); 
+            string guess = GetUserInput().ToString();
             int numberOfGuesses = 1;
 
             string progress = CheckGuess(generatedNumber, guess);
@@ -127,7 +130,7 @@ namespace Labb_Clean_Code
             while (progress != "BBBB,")
             {
                 numberOfGuesses++;
-                guess = ui.GetString();
+                guess = GetUserInput().ToString();
                 ui.PutString(guess + "\n");
                 progress = CheckGuess(generatedNumber, guess);
                 ui.PutString(progress + "\n");
@@ -151,6 +154,30 @@ namespace Labb_Clean_Code
                 player.Update();
                 players.Add(player);
             }
+        }
+
+        public int GetUserInput()
+        {
+            int userInput = 0;
+            bool isValidInput = false;
+
+            do
+            {
+                ui.PutString("Please enter a four digit number:");
+                string inputString = ui.GetString();
+
+                if (inputString.Length == 4 && int.TryParse(inputString, out userInput))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    ui.PutString("Invalid input.");
+                }
+            } while (!isValidInput);
+
+            return userInput;
+
         }
 
     }

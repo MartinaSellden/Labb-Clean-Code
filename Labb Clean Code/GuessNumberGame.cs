@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal class GuessNumberGame : IGameType
+    public class GuessNumberGame : IGameType
     {
         private IUI ui;
         private Game game;
@@ -68,7 +69,10 @@ namespace Labb_Clean_Code
 
             fileHandler.SaveData(fileName, players);
             gameScore.DisplayScore(fileName, players);
-            ui.PutString("Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue?");
+
+            string message = numberOfGuesses>1 ? "Well played, " + player.Name + "! It took " + numberOfGuesses + " guesses\nContinue y/n? ": "Well played, "+ player.Name + "! It took " + numberOfGuesses + " guess\nContinue y/n?";
+
+            ui.PutString(message);
 
             string answer = ui.GetString();
 
@@ -95,7 +99,7 @@ namespace Labb_Clean_Code
 
         public int GetNumberOfGuesses(string generatedNumber)
         {
-            string guess = ui.GetString();    
+            string guess = GetUserInput().ToString();    
 
             int numberOfGuesses = 1;
 
@@ -107,7 +111,7 @@ namespace Labb_Clean_Code
             while (hint != "Correct!")
             {
                 numberOfGuesses++;
-                guess = ui.GetString();
+                guess = GetUserInput().ToString(); 
                 hint = CheckGuess(generatedNumber, guess);
                 ui.PutString(hint + "\n");
             }
@@ -129,6 +133,30 @@ namespace Labb_Clean_Code
                 player.Update();
                 players.Add(player);
             }
+        }
+
+        public int GetUserInput()
+        {
+            int userInput = 0;
+            bool isValidInput = false;
+
+            do
+            {
+                ui.PutString("\nEnter a number between 1 and 100:");
+                string inputString = ui.GetString();
+
+                if (inputString.Length>0 && inputString.Length<4 && int.TryParse(inputString, out userInput))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    ui.PutString("\nInvalid input.");
+                }
+            } while (!isValidInput);
+
+            return userInput;
+
         }
     }
 }
