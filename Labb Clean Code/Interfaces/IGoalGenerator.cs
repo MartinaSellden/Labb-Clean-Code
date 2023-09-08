@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    public interface IRandomNumberGenerator
+    public interface IGoalGenerator
     {
-        int Next(int minValue, int maxValue);
-        int Next(int maxValue);
-        int Next();
+        int GetGoal();
+
     }
 }

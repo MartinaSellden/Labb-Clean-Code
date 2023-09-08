@@ -22,22 +22,66 @@ namespace Labb_Clean_Code
 
         public MooGame(IUI ui, Game game, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
-            this.ui=ui;
-            this.game=game;
-            this.gameController=gameController;
-            this.gameScore=gameScore;
-            this.fileHandler=fileHandler;
+            this.ui = ui;
+            this.game = game;
+            this.gameController = gameController;
+            this.gameScore = gameScore;
+            this.fileHandler = fileHandler;
         }
-
-        public string CheckGuess(string correctNumber, string guess)            
+        public void PlayGame(Player player)
         {
+            player.NumberOfGames = 0;
+
+            IGoalGenerator goalGenerator = new MooGoalGenerator();
+            int goalNumber = gameController.GenerateGoalNumber(goalGenerator);
+
+            if (IsPracticeSession())
+            {
+                DisplayGoalNumber(goalNumber);
+            }
+
+            ui.PutString("New game:\n");
+
+            int numberOfGuesses = GetNumberOfGuesses(goalNumber);
+
+            string fileName = "MooGame.txt";
+
+            players = fileHandler.RetrieveData(fileName);
+
+            UpdatePlayer(player, numberOfGuesses);
+
+            fileHandler.SaveData(fileName, players);
+            gameScore.DisplayScore(fileName, players);
+
+            string message = numberOfGuesses > 1 ? "Correct, it took " + numberOfGuesses + " guesses.\nContinue y/n?" : "Correct, it took " + numberOfGuesses + " guess.\nContinue y/n?";
+
+            ui.PutString(message);
+
+            string answer = ui.GetString();
+
+            if (PlayAgain(answer))
+            {
+                gameController.PlayAgain(game, player);
+            }
+
+            ui.Exit();
+        }
+        public int GenerateGoalNumber(IGoalGenerator mooGoalGenerator)
+        {
+            return mooGoalGenerator.GetGoal();
+        }
+        public string CheckGuess(int goalNumber, int guessedNumber)
+        {
+            string goal = goalNumber.ToString();
+            string guess = guessedNumber.ToString();
+
             int cows = 0, bulls = 0;
 
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (correctNumber[i] == guess[j])
+                    if (goal[i] == guess[j])
                     {
                         if (i == j)
                         {
@@ -52,101 +96,44 @@ namespace Labb_Clean_Code
             }
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
         }
-
-        public void PlayGame(Player player)
+        bool PlayAgain(string answer)
         {
-            player.NumberOfGames=0;
-
-            IRandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
-            string generatedNumber = gameController.GenerateRandomNumber(randomNumberGenerator);
-
-            if (IsPracticeSession())
-            {
-                DisplayGeneratedNumber(generatedNumber);
-            }
-
-            ui.PutString("New game:\n");
-
-            int numberOfGuesses = GetNumberOfGuesses(generatedNumber);
-
-            string fileName = "MooGame.txt";
-
-            players = fileHandler.RetrieveData(fileName);
-
-            UpdatePlayer(player, numberOfGuesses);
-
-            fileHandler.SaveData(fileName, players);
-            gameScore.DisplayScore(fileName, players);
-
-            string message = numberOfGuesses>1 ? "Correct, it took " + numberOfGuesses + " guesses.\nContinue y/n?" : "Correct, it took " + numberOfGuesses + " guess.\nContinue y/n?";
-
-            ui.PutString(message);
-
-            string answer = ui.GetString(); 
-
-            if (PlayAgain(answer))
-            {
-                gameController.PlayAgain(game, player);
-            }
-
-            ui.Exit();
-        }
-
-        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
-        {
-            string generatedNumber = "";
-            for (int i = 0; i < 4; i++)
-            {
-                int random = randomNumberGenerator.Next(10);
-                string randomDigit = "" + random;
-                while (generatedNumber.Contains(randomDigit))
-                {
-                    random = randomNumberGenerator.Next(10);
-                    randomDigit = "" + random;
-                }
-                generatedNumber = generatedNumber + randomDigit;
-            }
-            return generatedNumber;
-        }
-
-        public bool PlayAgain(string answer)
-        {
-            if (answer != null && answer != "" && answer.Substring(0, 1)=="n")
+            if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
             {
                 return false;
             }
             return true;
 
         }
-        public bool PlayerExists(List<Player> players, Player player)
+        bool PlayerExists(List<Player> players, Player player)
         {
-            return players.Any(p => p.Name==player.Name);
+            return players.Any(p => p.Name == player.Name);
         }
 
-        public int GetNumberOfGuesses(string generatedNumber)
+        int GetNumberOfGuesses(int goalNumber)
         {
-            string guess = GetUserGuess().ToString();
+            int guess = GetUserGuess();
             int numberOfGuesses = 1;
 
-            string progress = CheckGuess(generatedNumber, guess);
+            string progress = CheckGuess(goalNumber, guess);
             ui.PutString(progress + "\n");
             while (progress != "BBBB,")
             {
                 numberOfGuesses++;
-                guess = GetUserGuess().ToString();
+                guess = GetUserGuess();
                 ui.PutString(guess + "\n");
-                progress = CheckGuess(generatedNumber, guess);
+                progress = CheckGuess(goalNumber, guess);
                 ui.PutString(progress + "\n");
             }
             return numberOfGuesses;
         }
 
-        public void UpdatePlayer(Player player, int numberOfGuesses)
+        void UpdatePlayer(Player player, int numberOfGuesses)
         {
             if (PlayerExists(players, player))
             {
                 Player playerToUpdate = players.Find(p => p.Name == player.Name);
-                if (playerToUpdate!=null)
+                if (playerToUpdate != null)
                 {
                     playerToUpdate.Update(numberOfGuesses);
                 }
@@ -159,7 +146,7 @@ namespace Labb_Clean_Code
             }
         }
 
-        public int GetUserGuess()
+        int GetUserGuess()
         {
             int userInput = 0;
             bool isValidInput = false;
@@ -181,16 +168,16 @@ namespace Labb_Clean_Code
 
             return userInput;
         }
-        public void DisplayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        void DisplayGoalNumber(int goalNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
         {
-            ui.PutString("For practice the number is:" + generatedNumber);
+            ui.PutString("For practice the number is:" + goalNumber);
         }
-        public bool IsPracticeSession()
+        bool IsPracticeSession()
         {
             ui.PutString("\nWould you like to practice ? y/n : ");
             string inputString = ui.GetString().Trim();
 
-            if (inputString != null && inputString != "" && inputString.Substring(0, 1)!="n")
+            if (inputString != null && inputString != "" && inputString.Substring(0, 1) != "n")
             {
                 return true;
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Labb_Clean_Code;
 
 namespace Labb_Clean_Code.Tests
 {
@@ -10,11 +11,11 @@ namespace Labb_Clean_Code.Tests
     public class MooGameTests
     {
         [TestMethod]
-        public void TestGenerateRandomNumber()
+        public void TestGenerateGoalNumber() //kolla 
         {
-            IRandomNumberGenerator mockRandomGenerator = new MockRandomNumberGenerator(1234);
+            IGoalGenerator mockGoalGenerator = new MockGoalGenerator(1234);
 
-            var generatedNumber = mockRandomGenerator.Next();
+            var generatedNumber = mockGoalGenerator.GetGoal();
             Assert.AreEqual(1234, generatedNumber);
         }
     }

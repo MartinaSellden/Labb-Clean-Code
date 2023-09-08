@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Labb_Clean_Code;
+using Labb_Clean_Code;
+using Moq;
 
 namespace Labb_Clean_Code.Tests
 {
@@ -11,62 +13,62 @@ namespace Labb_Clean_Code.Tests
     public class GameTests
     {
         private Game game;
+        private MockUI mockUI;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            IUI ui = new ConsoleIO();
-            GameController gameController = new GameController(ui);
+            mockUI = new MockUI();
+            GameController gameController = new GameController(mockUI);
             IDataHandler fileHandler = new FileHandler();
-            GameScore gameScore = new GameScore(ui);
-            game = new Game(ui, gameController, gameScore, fileHandler);
+            GameScore gameScore = new GameScore(mockUI);
+            game = new Game(mockUI, gameController, gameScore, fileHandler);
         }
 
-        [TestMethod]
-        public void TestGenerateRandomNumber()
-        {  
-            IRandomNumberGenerator randomNumberGenerator = new MockRandomNumberGenerator(1234);
-            var generatedNumber = game.GenerateRandomNumber(randomNumberGenerator);
+        [DataTestMethod]
+        [DataRow(1234, 1234)]
+        [DataRow(5678, 5678)]
+        public void TestGenerateGoalNumber_MooGame(int mockedGoal, int expectedGoal)
+        {
+            IGoalGenerator goalGenerator = new MockGoalGenerator(mockedGoal);
+       
+            mockUI.SetStringInput("1");
 
-            Assert.AreEqual("1234", generatedNumber);
+            IGameType gameType = game.SetGameType();
+            var actualNumber = game.GenerateGoalNumber(goalGenerator);
+
+            Assert.AreEqual(expectedGoal, actualNumber);
+        }
+        [DataTestMethod]
+        [DataRow(100, 100)]
+        [DataRow(1, 1)]
+        public void TestGenerateGoalNumber_GuessNumberGame(int mockedGoal, int expectedGoal)
+        {
+            IGoalGenerator goalGenerator = new MockGoalGenerator(mockedGoal);
+
+            mockUI.SetStringInput("2");
+
+            IGameType gameType = game.SetGameType();
+            var actualNumber = game.GenerateGoalNumber(goalGenerator);
+
+            Assert.AreEqual(expectedGoal, actualNumber);
         }
 
         [TestMethod]
         public void TestGetGameType_ChooseMooGame()
         {
-            var mockUI = new MockUI();
-            GameController gameController = new GameController(mockUI);
-            IDataHandler fileHandler = new FileHandler();
-            GameScore gameScore = new GameScore(mockUI);
-            game = new Game(mockUI, gameController, gameScore, fileHandler);
-
-            mockUI.PutString("Choose a game type: 1 for MooGame, 2 for GuessNumberGame");
-            mockUI.SetStringInput("1"); 
-            IGameType gameType = game.GetGameType(game);
+            mockUI.SetStringInput("1");
+            IGameType gameType = game.SetGameType();
             Assert.IsInstanceOfType(gameType, typeof(MooGame));
-
         }
 
         [TestMethod]
         public void TestGetGameType_ChooseGuessNumberGame()
         {
-            var mockUI = new MockUI();
-            GameController gameController = new GameController(mockUI);
-            IDataHandler fileHandler = new FileHandler();
-            GameScore gameScore = new GameScore(mockUI);
-            game = new Game(mockUI, gameController, gameScore, fileHandler);
-
-            mockUI.PutString("Choose a game type: 1 for MooGame, 2 for GuessNumberGame");
-            mockUI.SetStringInput("2"); 
-
-            IGameType gameType = game.GetGameType(game);
+            mockUI.SetStringInput("2");
+            IGameType gameType = game.SetGameType();
             Assert.IsInstanceOfType(gameType, typeof(GuessNumberGame));
 
-        }
-
-        [TestMethod]
-        public void TestDisplayMenu()
-        {
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
@@ -23,16 +22,13 @@ namespace Labb_Clean_Code
             this.gameScore = gameScore;
             this.fileHandler = fileHandler;
         }
-        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
+        public int GenerateGoalNumber(IGoalGenerator goalGenerator)
         {
-            return gameType.GenerateRandomNumber(randomNumberGenerator);
+            return gameType.GenerateGoalNumber(goalGenerator);
 
         }
-        private void setGameType(IGameType gameType)
-        {
-            this.gameType = gameType;
-        }
-        public IGameType GetGameType(Game game)
+
+        public IGameType SetGameType()
         {
             DisplayMenu();
             int number = getUserInput();
@@ -42,17 +38,17 @@ namespace Labb_Clean_Code
                 switch (number)
                 {
                     case 1:
-                        setGameType(new MooGame(this.ui, game, this.gameController, this.gameScore, this.fileHandler));
+                        this.gameType =  new MooGame(ui, this, gameController, gameScore, fileHandler);
                         break;
                     case 2:
-                        setGameType(new GuessNumberGame(this.ui, game, this.gameController, this.gameScore, this.fileHandler));
+                        this.gameType = new GuessNumberGame(ui, this, gameController, gameScore, fileHandler);
                         break;
                     default:
                         ui.PutString("Invalid input");
-                        GetGameType(game);
+                        SetGameType();
                         break;
                 }
-                return gameType; 
+                return gameType;
             }
         }
 
