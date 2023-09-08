@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal interface IGameType
+    public interface IGameType
     {
-        void PlayGame();
+        void PlayGame(Player player);
         string CheckGuess(string correctNumber, string guess);
-        string GenerateNumber();
+        string GenerateRandomNumber(IRandomNumberGenerator randomGenerator);
         bool PlayAgain(string userAnswer);
         bool PlayerExists(List<Player> players, Player player);
+        int GetNumberOfGuesses(string generatedNumber);
+        void UpdatePlayer(Player player, int numberOfGuesses);
     }
 }

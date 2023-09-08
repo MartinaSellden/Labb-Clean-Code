@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    public interface IUI
+    public interface IRandomNumberGenerator
     {
-        void PutString(string outputString);
-        string GetString();
-        void Exit();
-        void Clear();
+        int Next(int minValue, int maxValue);
+        int Next(int maxValue);
+        int Next();
     }
 }
