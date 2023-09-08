@@ -60,9 +60,9 @@ namespace Labb_Clean_Code
             IRandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
             string generatedNumber = gameController.GenerateRandomNumber(randomNumberGenerator);
 
-            if (isPracticeSession())
+            if (IsPracticeSession())
             {
-                displayGeneratedNumber(generatedNumber);
+                DisplayGeneratedNumber(generatedNumber);
             }
 
             ui.PutString("New game:\n");
@@ -82,7 +82,7 @@ namespace Labb_Clean_Code
 
             ui.PutString(message);
 
-            string answer = ui.GetString();     //kolla input?
+            string answer = ui.GetString(); 
 
             if (PlayAgain(answer))
             {
@@ -181,11 +181,11 @@ namespace Labb_Clean_Code
 
             return userInput;
         }
-        void displayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        public void DisplayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
         {
             ui.PutString("For practice the number is:" + generatedNumber);
         }
-        bool isPracticeSession()
+        public bool IsPracticeSession()
         {
             ui.PutString("\nWould you like to practice ? y/n : ");
             string inputString = ui.GetString().Trim();

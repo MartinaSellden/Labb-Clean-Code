@@ -16,5 +16,7 @@ namespace Labb_Clean_Code
         int GetNumberOfGuesses(string generatedNumber);
         void UpdatePlayer(Player player, int numberOfGuesses);
         int GetUserGuess();
+        void DisplayGeneratedNumber(string generatedNumber);
+        bool IsPracticeSession();
     }
 }

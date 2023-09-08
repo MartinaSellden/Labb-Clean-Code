@@ -25,7 +25,7 @@ namespace Labb_Clean_Code
             this.fileHandler=fileHandler;
         }
 
-        public string CheckGuess(string correctNumber, string guess)  //dubbelkolla input. Ta in int här
+        public string CheckGuess(string correctNumber, string guess)  
         {
             int numberToGuess = int.Parse(correctNumber);
             int playerGuess = int.Parse(guess);
@@ -45,7 +45,7 @@ namespace Labb_Clean_Code
 
         public string GenerateRandomNumber(IRandomNumberGenerator randomGenerator)
         {
-            int generatedNumber = randomGenerator.Next(1, 101);  //kolla att det är rätt
+            int generatedNumber = randomGenerator.Next(1, 101);  
             return generatedNumber.ToString();
         }
 
@@ -56,9 +56,9 @@ namespace Labb_Clean_Code
             IRandomNumberGenerator random = new RandomNumberGenerator();
             string generatedNumber = gameController.GenerateRandomNumber(random);
 
-            if (isPracticeSession())
+            if (IsPracticeSession())
             {
-                displayGeneratedNumber(generatedNumber);
+                DisplayGeneratedNumber(generatedNumber);
             }
 
             ui.PutString("Guess the number (between 1 and 100)\n");
@@ -78,8 +78,7 @@ namespace Labb_Clean_Code
 
             ui.PutString(message);
 
-            string answer = ui.GetString();  //kanske kolla input?
-
+            string answer = ui.GetString();  
             if (PlayAgain(answer))
             {
                 gameController.PlayAgain(game, player);
@@ -162,11 +161,11 @@ namespace Labb_Clean_Code
             return userInput;
         }
 
-        void displayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        public void DisplayGeneratedNumber(string generatedNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
         {
             ui.PutString("For practice the number is:" + generatedNumber);
         }
-        bool isPracticeSession()
+        public bool IsPracticeSession()
         {
             ui.PutString("\nWould you like to practice ? y/n : ");
             string inputString = ui.GetString().Trim();
