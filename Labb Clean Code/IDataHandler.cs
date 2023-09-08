@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Labb_Clean_Code
 {
-    internal interface IDataHandler
+    public interface IDataHandler
     {
-        void SaveData(string fileName, Player player);
+        void SaveData(string fileName, List<Player> players);
         List<Player> RetrieveData(string fileName);
     }
 }

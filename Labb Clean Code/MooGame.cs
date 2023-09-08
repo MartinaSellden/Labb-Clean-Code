@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -13,13 +14,17 @@ namespace Labb_Clean_Code
     {
         private IUI ui;
         private Game game;
+        private GameController gameController;
         private GameScore gameScore;
         private IDataHandler fileHandler;
+        private List<Player> players;
+      
 
-        public MooGame(IUI ui, Game game, GameScore gameScore, IDataHandler fileHandler)
+        public MooGame(IUI ui, Game game, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
             this.ui=ui;
             this.game=game;
+            this.gameController=gameController;
             this.gameScore=gameScore;
             this.fileHandler=fileHandler;
         }
@@ -48,78 +53,50 @@ namespace Labb_Clean_Code
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
         }
 
-        public void PlayGame()
+        public void PlayGame(Player player)
         {
-            string answer = "";
+            player.NumberOfGames=0;
 
-            ui.PutString("Enter your user name:\n");
-
-            string playerName = ui.GetString();
-
-            string generatedNumber = game.GenerateNumber(); 
+            IRandomNumberGenerator random = new RandomNumberGenerator();
+            string generatedNumber = gameController.GenerateRandomNumber(random); 
 
             ui.PutString("New game:\n");
             //comment out or remove next line to play real games!
             ui.PutString("For practice, number is: " + generatedNumber + "\n");
 
-            string guess = ui.GetString();
+            int numberOfGuesses = GetNumberOfGuesses(generatedNumber);
 
-            int numberOfGuesses = 1;
-
-            string progress = CheckGuess(generatedNumber, guess);
-            ui.PutString(progress + "\n");
-            while (progress != "BBBB,")
-            {
-                numberOfGuesses++;
-                guess = ui.GetString();
-                ui.PutString(guess + "\n");
-                progress = CheckGuess(generatedNumber, guess);
-                ui.PutString(progress + "\n");
-            }
             string fileName = "MooGame.txt";
-            Player player = new Player(playerName, numberOfGuesses);
-            List<Player> players = fileHandler.RetrieveData(fileName); 
 
-            if (PlayerExists(players, player))
-            {
-                Player playerToUpdate = players.Find(p => p.Name == player.Name);
-                if (playerToUpdate!=null)
-                {                                                     
-                    playerToUpdate.Update(numberOfGuesses);
-                }
-            }
-            else
-            {
-                player.Update();
-                players.Add(player);
-            }
+            players = fileHandler.RetrieveData(fileName);
 
-            fileHandler.SaveData(fileName, player); 
-            gameScore.DisplayScore(fileName);
+
+            UpdatePlayer(player, numberOfGuesses);
+
+            fileHandler.SaveData(fileName, players);                           
+            gameScore.DisplayScore(fileName, players);
             ui.PutString("Correct, it took " + numberOfGuesses + " guesses\nContinue?");
-            
-            answer = ui.GetString();
+
+            string answer = ui.GetString();
 
             if (PlayAgain(answer))
             {
-                game.PlayGame(game);
+                gameController.PlayAgain(game, player);
             }
 
             ui.Exit();
         }
 
-        public string GenerateNumber()    //ändra denna?
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)    //ändra denna?
         {
-            Random randomGenerator = new Random();
-
             string generatedNumber = "";
             for (int i = 0; i < 4; i++)
             {
-                int random = randomGenerator.Next(10);
+                int random = randomNumberGenerator.Next(10);
                 string randomDigit = "" + random;
                 while (generatedNumber.Contains(randomDigit))
                 {
-                    random = randomGenerator.Next(10);
+                    random = randomNumberGenerator.Next(10);
                     randomDigit = "" + random;
                 }
                 generatedNumber = generatedNumber + randomDigit;
@@ -140,5 +117,41 @@ namespace Labb_Clean_Code
         {
             return players.Any(p => p.Name==player.Name);
         }
+        public int GetNumberOfGuesses(string generatedNumber)
+        {
+            string guess = ui.GetString(); 
+            int numberOfGuesses = 1;
+
+            string progress = CheckGuess(generatedNumber, guess);
+            ui.PutString(progress + "\n");
+            while (progress != "BBBB,")
+            {
+                numberOfGuesses++;
+                guess = ui.GetString();
+                ui.PutString(guess + "\n");
+                progress = CheckGuess(generatedNumber, guess);
+                ui.PutString(progress + "\n");
+            }
+            return numberOfGuesses;
+        }
+
+        public void UpdatePlayer(Player player, int numberOfGuesses)
+        {
+            if (PlayerExists(players, player))
+            {
+                Player playerToUpdate = players.Find(p => p.Name == player.Name);
+                if (playerToUpdate!=null)
+                {
+                    playerToUpdate.Update(numberOfGuesses);
+                }
+            }
+            else
+            {
+                player.TotalGuesses = numberOfGuesses;
+                player.Update();
+                players.Add(player);
+            }
+        }
+
     }
 }

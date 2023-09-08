@@ -7,16 +7,15 @@ using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
-    internal class GameController
+    public class GameController
     {
-        private Game game;
+        private IUI ui;
         private IGameType gameType;
 
-        public GameController(Game game)
+        public GameController(IUI ui)
         {
-            this.game = game;
+            this.ui=ui; 
         }
-
         public void SetGameType(IGameType gameType)
         {
             this.gameType = gameType;
@@ -25,11 +24,30 @@ namespace Labb_Clean_Code
         {
             gameType.CheckGuess(correctNumber, guess);
         }
-        public string GenerateNumber()
+        public string GenerateRandomNumber(IRandomNumberGenerator randomNumberGenerator)
         {
-            return gameType.GenerateNumber();
+            return gameType.GenerateRandomNumber(randomNumberGenerator);
+        }
+        public void PlayGame(Game game)
+        {
+            string playerName = getPlayerName();
+            Player player = new Player(playerName);
+
+            SetGameType(game.GetGameType(game));
+
+            gameType.PlayGame(player);
+        }
+        public void PlayAgain(Game game, Player player)
+        {
+            SetGameType(game.GetGameType(game));
+            gameType.PlayGame(player);
         }
         
+        string getPlayerName()
+        {
+            ui.PutString("Enter your user name:\n");
+            return ui.GetString();
+        }
 
     }
 
