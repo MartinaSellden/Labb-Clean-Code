@@ -8,12 +8,11 @@ namespace Labb_Clean_Code
 {
     public class Game
     {
-        IGameType gameType;
+        private IGameType gameType;
         private IUI ui;
         private GameController gameController;
         private GameScore gameScore;
         private IDataHandler fileHandler;
-        private List<Player> players = new List<Player>();
 
         public Game(IUI ui, GameController gameController, GameScore gameScore, IDataHandler fileHandler)
         {
@@ -28,7 +27,7 @@ namespace Labb_Clean_Code
 
         }
 
-        public IGameType SetGameType()
+        public IGameType GetGameType()
         {
             DisplayMenu();
             int number = getUserInput();
@@ -45,14 +44,14 @@ namespace Labb_Clean_Code
                         break;
                     default:
                         ui.PutString("Invalid input");
-                        SetGameType();
+                        GetGameType();
                         break;
                 }
                 return gameType;
             }
         }
 
-        public void DisplayMenu()
+        void DisplayMenu()
         {
             ui.PutString("Choose a game:\n");
             ui.PutString("1. Moo Game \n2. Guess the Number Game");

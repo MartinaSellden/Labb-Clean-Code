@@ -15,13 +15,9 @@ namespace Labb_Clean_Code
         {
             this.ui = ui;
         }
-        public void SetGameType(IGameType gameType)
+        void SetGameType(IGameType gameType)
         {
             this.gameType = gameType;
-        }
-        public void CheckGuess(int goalNumber, int guessedNumber)
-        {
-            gameType.CheckGuess(goalNumber, guessedNumber);
         }
         public int GenerateGoalNumber(IGoalGenerator goalGenerator)
         {
@@ -32,13 +28,13 @@ namespace Labb_Clean_Code
             string playerName = getPlayerName();
             Player player = new Player(playerName);
 
-            SetGameType(game.SetGameType());
+            SetGameType(game.GetGameType());
 
             gameType.PlayGame(player);
         }
         public void PlayAgain(Game game, Player player)
         {
-            SetGameType(game.SetGameType());
+            SetGameType(game.GetGameType());
             gameType.PlayGame(player);
         }
 

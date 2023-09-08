@@ -70,7 +70,7 @@ namespace Labb_Clean_Code
         {
             return mooGoalGenerator.GetGoal();
         }
-        public string CheckGuess(int goalNumber, int guessedNumber)
+        string CheckGuess(int goalNumber, int guessedNumber)
         {
             string goal = goalNumber.ToString();
             string guess = guessedNumber.ToString();

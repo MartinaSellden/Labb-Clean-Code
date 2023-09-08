@@ -11,6 +11,5 @@ namespace Labb_Clean_Code
     {
         void PlayGame(Player player);
         int GenerateGoalNumber(IGoalGenerator goalGenerator);
-        string CheckGuess(int goalNumber, int guessedNumber);
     }
 }

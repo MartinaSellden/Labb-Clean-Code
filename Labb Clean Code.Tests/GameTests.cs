@@ -31,10 +31,9 @@ namespace Labb_Clean_Code.Tests
         public void TestGenerateGoalNumber_MooGame(int mockedGoal, int expectedGoal)
         {
             IGoalGenerator goalGenerator = new MockGoalGenerator(mockedGoal);
-       
             mockUI.SetStringInput("1");
 
-            IGameType gameType = game.SetGameType();
+            IGameType gameType = game.GetGameType();
             var actualNumber = game.GenerateGoalNumber(goalGenerator);
 
             Assert.AreEqual(expectedGoal, actualNumber);
@@ -45,28 +44,27 @@ namespace Labb_Clean_Code.Tests
         public void TestGenerateGoalNumber_GuessNumberGame(int mockedGoal, int expectedGoal)
         {
             IGoalGenerator goalGenerator = new MockGoalGenerator(mockedGoal);
-
             mockUI.SetStringInput("2");
 
-            IGameType gameType = game.SetGameType();
+            IGameType gameType = game.GetGameType();
             var actualNumber = game.GenerateGoalNumber(goalGenerator);
 
             Assert.AreEqual(expectedGoal, actualNumber);
         }
 
         [TestMethod]
-        public void TestGetGameType_ChooseMooGame()
+        public void TestSetGameType_ChooseMooGame()
         {
             mockUI.SetStringInput("1");
-            IGameType gameType = game.SetGameType();
+            IGameType gameType = game.GetGameType();
             Assert.IsInstanceOfType(gameType, typeof(MooGame));
         }
 
         [TestMethod]
-        public void TestGetGameType_ChooseGuessNumberGame()
+        public void TestSetGameType_ChooseGuessNumberGame()
         {
             mockUI.SetStringInput("2");
-            IGameType gameType = game.SetGameType();
+            IGameType gameType = game.GetGameType();
             Assert.IsInstanceOfType(gameType, typeof(GuessNumberGame));
 
         }

@@ -9,6 +9,5 @@ namespace Labb_Clean_Code
     public interface IGoalGenerator
     {
         int GetGoal();
-
     }
 }

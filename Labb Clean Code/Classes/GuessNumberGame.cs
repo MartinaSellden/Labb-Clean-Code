@@ -66,7 +66,7 @@ namespace Labb_Clean_Code
         {
             return goalNumberGenerator.GetGoal();
         }
-        public string CheckGuess(int goalNumber, int guessedNumber)
+        string CheckGuess(int goalNumber, int guessedNumber)
         {
 
             while (goalNumber != guessedNumber)
