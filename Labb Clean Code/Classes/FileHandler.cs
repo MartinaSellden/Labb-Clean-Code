@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
-    public class FileHandler: IDataHandler
+    public class FileHandler : IDataHandler
     {
-        private List<Player> players = new List<Player>(); //borde innehålla namnen bara och delas?
+        private List<Player> players = new List<Player>();
 
-
-        //ta in en resultattabell? För att spara olika tabeller i filerna. 
         public FileHandler() { }
 
-        public List<Player> RetrieveData(string fileName) 
+        public List<Player> RetrieveData(string fileName)
         {
             if (!File.Exists(fileName))
             {
@@ -33,14 +32,14 @@ namespace Labb_Clean_Code
                 int numberOfGames = int.Parse(playerData[1]);
                 int totalGuesses = int.Parse(playerData[2]);
                 double averageGuesses = double.Parse(playerData[3]);
-                Player player = (new Player(name, numberOfGames, totalGuesses, averageGuesses));
+                Player player = new Player(name, numberOfGames, totalGuesses, averageGuesses);
 
-                bool playerExists = players.Any(player => player.Name==name);
+                bool playerExists = players.Any(player => player.Name == name);
                 if (!playerExists)
                 {
                     players.Add(player);
                 }
-            
+
             }
             dataFromFile.Close();
             return players;
@@ -56,9 +55,9 @@ namespace Labb_Clean_Code
             }
             StreamWriter writeToFile = new StreamWriter(fileName, append: false);
 
-            foreach(Player gamePlayer in players)    
+            foreach (Player gamePlayer in players)
             {
-                writeToFile.WriteLine(gamePlayer.Name + "&"  + gamePlayer.NumberOfGames +"&"+ gamePlayer.TotalGuesses  + "&" + gamePlayer.AverageGuesses );
+                writeToFile.WriteLine(gamePlayer.Name + "&" + gamePlayer.NumberOfGames + "&" + gamePlayer.TotalGuesses + "&" + gamePlayer.AverageGuesses);
             }
             writeToFile.Close();
         }

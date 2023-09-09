@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
@@ -15,7 +16,7 @@ namespace Labb_Clean_Code
 
         public void Exit()
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
 
         public string GetString()
