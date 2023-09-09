@@ -15,33 +15,33 @@ namespace Labb_Clean_Code
 
         public Player(string name)
         {
-            this.Name = name;
+            Name = name;
         }
         public Player(string name, int guesses)
         {
-            this.Name = name;
-            this.TotalGuesses = guesses;
+            Name = name;
+            TotalGuesses = guesses;
         }
 
-        public Player(string name, int numberOfGames,int totalGuesses, double averageGuesses)
+        public Player(string name, int numberOfGames, int totalGuesses, double averageGuesses)
         {
-            this.Name = name;
-            this.NumberOfGames = numberOfGames;
-            this.TotalGuesses += totalGuesses;
-            this.AverageGuesses = averageGuesses;
+            Name = name;
+            NumberOfGames = numberOfGames;
+            TotalGuesses += totalGuesses;
+            AverageGuesses = averageGuesses;
         }
 
         public void Update(int numberOfGuesses)
         {
             TotalGuesses += numberOfGuesses;
             NumberOfGames++;
-            AverageGuesses = (double) TotalGuesses / NumberOfGames;
-           
+            AverageGuesses = (double)TotalGuesses / NumberOfGames;
+
         }
         public void Update()
         {
             NumberOfGames++;
-            AverageGuesses = (double) TotalGuesses / NumberOfGames;
+            AverageGuesses = (double)TotalGuesses / NumberOfGames;
         }
 
     }

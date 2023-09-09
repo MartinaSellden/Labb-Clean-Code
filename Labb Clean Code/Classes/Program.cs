@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Labb_Clean_Code;
 
 namespace Labb_Clean_Code
 {
@@ -16,8 +15,7 @@ namespace Labb_Clean_Code
             GameController gameController = new GameController(ui);
             Game game = new Game(ui, gameController, gameScore, fileHandler);
             gameController.PlayGame(game);
-             
+
         }
     }
 }
-       

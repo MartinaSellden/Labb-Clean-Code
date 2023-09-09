@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Labb_Clean_Code.Tests
+namespace Labb_Clean_Code
 {
-    internal class GameControllerTests
+    public interface IGoalGenerator
     {
+        int GetGoal();
     }
 }
