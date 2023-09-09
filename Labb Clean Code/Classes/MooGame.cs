@@ -168,7 +168,7 @@ namespace Labb_Clean_Code
 
             return userInput;
         }
-        void DisplayGoalNumber(int goalNumber)   // ska sådana här vara här? Ska de finnas i interfacet?
+        void DisplayGoalNumber(int goalNumber)  
         {
             ui.PutString("For practice the number is:" + goalNumber);
         }
